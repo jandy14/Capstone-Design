@@ -15,6 +15,7 @@ public class LaserPointerWithMakeCube : MonoBehaviour {
     public LayerMask makeCubeMask;
     private Transform hitObj;
     private bool shouldMake;
+    private bool shouldDelete;
     private GameObject hitObjParent;
 
     private SteamVR_Controller.Device Controller
@@ -65,8 +66,18 @@ public class LaserPointerWithMakeCube : MonoBehaviour {
                 if (Controller.GetAxis().y < 0)
                 {
                     shouldMake = true;
+                    shouldDelete = false;
                     hitObj = hit.collider.gameObject.transform;
                     hitObjParent = hitObj.parent.gameObject;
+                    laser.GetComponent<MeshRenderer>().material.color = Color.red;
+                }
+                else
+                {
+                    shouldMake = false;
+                    shouldDelete = true;
+                    hitObj = hit.collider.gameObject.transform;
+                    hitObjParent = hitObj.parent.gameObject;
+                    laser.GetComponent<MeshRenderer>().material.color = Color.blue;
                 }
             }
         }
@@ -77,9 +88,16 @@ public class LaserPointerWithMakeCube : MonoBehaviour {
 
         if (Controller.GetPressUp(SteamVR_Controller.ButtonMask.Touchpad))
         {
-            
-            if (shouldMake && hitObj.tag.Equals("POWERCUBE"))
-                MakeCube();
+            if (hitObj)
+            {
+                if (shouldMake && hitObj.tag.Equals("POWERCUBE"))
+                    MakeCube();
+                else if (shouldDelete && hitObj.tag.Equals("POWERCUBE"))
+                    DeleteCube();
+
+                shouldMake = false;
+                shouldDelete = false;
+            }
         }
     }
     void MakeCube()
@@ -106,5 +124,11 @@ public class LaserPointerWithMakeCube : MonoBehaviour {
 
         hitObj = null;
     }
-
+    void DeleteCube()
+    {
+        if(hitObjParent.transform.childCount > 1)
+        {
+            Destroy(hitObj.gameObject);
+        }
+    }
 }
