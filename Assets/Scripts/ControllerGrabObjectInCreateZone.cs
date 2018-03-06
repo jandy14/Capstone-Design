@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ControllerGrabObject : MonoBehaviour {
+public class ControllerGrabObjectInCreateZone : MonoBehaviour
+{
     private SteamVR_TrackedObject trackedObj;
     private GameObject collidingObject;
     private GameObject objectInHand;
     private Grid grid;
 
-    
+
     private SteamVR_Controller.Device Controller
     {
         get { return SteamVR_Controller.Input((int)trackedObj.index); }
@@ -22,9 +23,9 @@ public class ControllerGrabObject : MonoBehaviour {
 
     private void SetCollidingObject(Collider col)
     {
-        if (collidingObject||!col.GetComponent<Rigidbody>())
+        if (collidingObject || !col.GetComponent<Rigidbody>())
         {
-            if(!col.transform.parent||!col.transform.parent.GetComponent<Rigidbody>())
+            if (!col.transform.parent || !col.transform.parent.GetComponent<Rigidbody>())
                 return;
         }
         if (col.transform.parent)
@@ -50,7 +51,7 @@ public class ControllerGrabObject : MonoBehaviour {
         if (!collidingObject) { return; }
 
 
-            collidingObject = null;
+        collidingObject = null;
     }
 
     private FixedJoint AddFixedJoint()
@@ -68,37 +69,38 @@ public class ControllerGrabObject : MonoBehaviour {
 
         var joint = AddFixedJoint();
         joint.connectedBody = objectInHand.GetComponent<Rigidbody>();
+
+        objectInHand.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
     }
 
     private void ReleaseObject()
     {
-        if(GetComponent<FixedJoint>())
+        if (GetComponent<FixedJoint>())
         {
             GetComponent<FixedJoint>().connectedBody = null;
             Destroy(GetComponent<FixedJoint>());
-            
-            objectInHand.GetComponent<Rigidbody>().velocity = Controller.velocity;
-            objectInHand.GetComponent<Rigidbody>().angularVelocity = Controller.angularVelocity;
-            
+
+            objectInHand.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
         }
         objectInHand = null;
     }
 
-    void Update () {
-		if(Controller.GetHairTriggerDown())
+    void Update()
+    {
+        if (Controller.GetHairTriggerDown())
         {
-            if(collidingObject)
+            if (collidingObject)
             {
                 GrabObject();
             }
         }
 
-        if(Controller.GetHairTriggerUp())
+        if (Controller.GetHairTriggerUp())
         {
             if (objectInHand)
             {
                 ReleaseObject();
             }
         }
-	}
+    }
 }
