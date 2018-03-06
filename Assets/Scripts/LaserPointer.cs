@@ -17,8 +17,10 @@ public class LaserPointer : MonoBehaviour {
     public Transform headTransform;
     public Vector3 teleportReticleOffset;
     public LayerMask teleportMask;
+    private Transform hitObj;
     private bool shouldTeleport;
     private bool shouldMake;
+    public GameObject whoisyourmother;
 
     private SteamVR_Controller.Device Controller
     {
@@ -79,6 +81,8 @@ public class LaserPointer : MonoBehaviour {
                 else
                 {
                     shouldMake = true;
+                    hitObj = hit.collider.gameObject.transform;
+                    Debug.Log(hitObj);
                     shouldTeleport = false;
                 }
             }
@@ -93,7 +97,7 @@ public class LaserPointer : MonoBehaviour {
         {
             if (shouldTeleport)
                 Teleport();
-            else if (shouldMake)
+            else if (shouldMake && hitObj.tag.Equals("POWERCUBE"))
                 MakeCube();
         }
 	}
@@ -103,7 +107,26 @@ public class LaserPointer : MonoBehaviour {
         reticle.SetActive(false);
         Vector3 difference = cameraRigTransform.position - headTransform.position;
         difference.y = 10;
-        GameObject g = Instantiate(Cube);
-        g.transform.position = hitPoint + new Vector3(0,.2f,0);
+        GameObject g = Instantiate(Cube, whoisyourmother.transform);
+        Vector3 test = whoisyourmother.transform.InverseTransformPoint(hitPoint);
+
+        Vector3 tmp = test - hitObj.localPosition;
+
+        if (Mathf.Abs(tmp.x) > Mathf.Abs(tmp.y) && Mathf.Abs(tmp.x) > Mathf.Abs(tmp.z))
+            g.transform.localPosition= hitObj.localPosition + (tmp.x / Mathf.Abs(tmp.x)) * new Vector3(.15f, 0, 0);
+
+        else if (Mathf.Abs(tmp.y) > Mathf.Abs(tmp.z))
+            g.transform.localPosition = hitObj.localPosition + (tmp.y / Mathf.Abs(tmp.y)) * new Vector3(0, .15f, 0);
+
+        else
+            g.transform.localPosition = hitObj.localPosition + (tmp.z / Mathf.Abs(tmp.z)) * new Vector3(0, 0, .15f);
+
+
+        g.transform.parent = whoisyourmother.transform;
+        
+
+        hitObj = null;
     }
+
+    
 }

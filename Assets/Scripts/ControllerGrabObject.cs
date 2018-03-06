@@ -6,7 +6,9 @@ public class ControllerGrabObject : MonoBehaviour {
     private SteamVR_TrackedObject trackedObj;
     private GameObject collidingObject;
     private GameObject objectInHand;
+    private Grid grid;
 
+    
     private SteamVR_Controller.Device Controller
     {
         get { return SteamVR_Controller.Input((int)trackedObj.index); }
@@ -15,6 +17,7 @@ public class ControllerGrabObject : MonoBehaviour {
     private void Awake()
     {
         trackedObj = GetComponent<SteamVR_TrackedObject>();
+        grid = FindObjectOfType<Grid>();
     }
 
     private void SetCollidingObject(Collider col)
@@ -67,14 +70,14 @@ public class ControllerGrabObject : MonoBehaviour {
         {
             GetComponent<FixedJoint>().connectedBody = null;
             Destroy(GetComponent<FixedJoint>());
-
+            
             objectInHand.GetComponent<Rigidbody>().velocity = Controller.velocity;
             objectInHand.GetComponent<Rigidbody>().angularVelocity = Controller.angularVelocity;
+            
         }
         objectInHand = null;
     }
 
-    // Update is called once per frame
     void Update () {
 		if(Controller.GetHairTriggerDown())
         {
