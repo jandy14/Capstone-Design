@@ -7,8 +7,6 @@ public class ControllerGrabObjectInCreateZone : MonoBehaviour
     private SteamVR_TrackedObject trackedObj;
     private GameObject collidingObject;
     private GameObject objectInHand;
-    private Grid grid;
-
 
     private SteamVR_Controller.Device Controller
     {
@@ -18,7 +16,6 @@ public class ControllerGrabObjectInCreateZone : MonoBehaviour
     private void Awake()
     {
         trackedObj = GetComponent<SteamVR_TrackedObject>();
-        grid = FindObjectOfType<Grid>();
     }
 
     private void SetCollidingObject(Collider col)
