@@ -7,6 +7,7 @@ public class LaserPointerWithMakeCube : MonoBehaviour {
     public GameObject laserPrefab;
     private GameObject laser;
     private Transform laserTransform;
+    private GameObject previewCube;
     private Vector3 hitPoint;
     public GameObject Cube;
 
@@ -48,6 +49,9 @@ public class LaserPointerWithMakeCube : MonoBehaviour {
     {
         laser = Instantiate(laserPrefab);
         laserTransform = laser.transform;
+        previewCube = Instantiate(Cube);
+        previewCube.GetComponent<MeshRenderer>().material.color = new Color(1f, 0, 0, 0.3f);
+        Destroy(previewCube.GetComponent<BoxCollider>());
     }
 
     // Update is called once per frame
@@ -90,6 +94,15 @@ public class LaserPointerWithMakeCube : MonoBehaviour {
         else
         {
             laser.SetActive(false);
+        }
+
+        if (shouldMake)
+        {
+            ShowPreviewCube();
+        }
+        else
+        {
+            previewCube.SetActive(false);
         }
 
         if (Controller.GetPressUp(SteamVR_Controller.ButtonMask.Touchpad))
@@ -136,5 +149,28 @@ public class LaserPointerWithMakeCube : MonoBehaviour {
         {
             Destroy(hitObj.gameObject);
         }
+    }
+    void ShowPreviewCube()
+    {
+        Vector3 difference = cameraRigTransform.position - headTransform.position;
+        difference.y = 10;
+        GameObject g = previewCube;
+        Vector3 tmpScale = g.transform.localScale;
+        g.transform.parent = hitObjParent.transform;
+        g.transform.localScale = tmpScale;
+        g.transform.localRotation = Quaternion.Euler(0, 0, 0);
+        previewCube.SetActive(true);
+        Vector3 test = hitObjParent.transform.InverseTransformPoint(hitPoint);
+
+        Vector3 tmp = test - hitObj.localPosition;
+
+        if (Mathf.Abs(tmp.x) > Mathf.Abs(tmp.y) && Mathf.Abs(tmp.x) > Mathf.Abs(tmp.z))
+            g.transform.localPosition = hitObj.localPosition + (tmp.x / Mathf.Abs(tmp.x)) * new Vector3(.15f, 0, 0);
+
+        else if (Mathf.Abs(tmp.y) > Mathf.Abs(tmp.z))
+            g.transform.localPosition = hitObj.localPosition + (tmp.y / Mathf.Abs(tmp.y)) * new Vector3(0, .15f, 0);
+
+        else
+            g.transform.localPosition = hitObj.localPosition + (tmp.z / Mathf.Abs(tmp.z)) * new Vector3(0, 0, .15f);
     }
 }
