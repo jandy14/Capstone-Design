@@ -80,6 +80,12 @@ public class LaserPointerWithMakeCube : MonoBehaviour {
                     laser.GetComponent<MeshRenderer>().material.color = Color.blue;
                 }
             }
+            else
+            {
+                laser.SetActive(false);
+                shouldDelete = false;
+                shouldMake = false;
+            }
         }
         else
         {
