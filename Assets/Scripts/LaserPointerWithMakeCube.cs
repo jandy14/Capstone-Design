@@ -67,21 +67,25 @@ public class LaserPointerWithMakeCube : MonoBehaviour {
                 hitPoint = hit.point;
                 ShowLaser(hit);
 
+                if(hitObj)
+                {
+                    hitObj.GetComponent<MeshRenderer>().material.color = Color.white;
+                }
+                hitObj = hit.collider.gameObject.transform;
+                hitObjParent = hitObj.parent.gameObject;
+
                 if (Controller.GetAxis().y < 0)
                 {
                     shouldMake = true;
                     shouldDelete = false;
-                    hitObj = hit.collider.gameObject.transform;
-                    hitObjParent = hitObj.parent.gameObject;
                     laser.GetComponent<MeshRenderer>().material.color = Color.red;
                 }
                 else
                 {
                     shouldMake = false;
                     shouldDelete = true;
-                    hitObj = hit.collider.gameObject.transform;
-                    hitObjParent = hitObj.parent.gameObject;
                     laser.GetComponent<MeshRenderer>().material.color = Color.blue;
+                    hitObj.GetComponent<MeshRenderer>().material.color = new Color(.6f, .6f, 1f, 1f);
                 }
             }
             else
@@ -89,11 +93,15 @@ public class LaserPointerWithMakeCube : MonoBehaviour {
                 laser.SetActive(false);
                 shouldDelete = false;
                 shouldMake = false;
+                if(hitObj)
+                    hitObj.GetComponent<MeshRenderer>().material.color = Color.white;
             }
         }
         else
         {
             laser.SetActive(false);
+            if (hitObj)
+                hitObj.GetComponent<MeshRenderer>().material.color = Color.white;
         }
 
         if (shouldMake)
@@ -152,13 +160,8 @@ public class LaserPointerWithMakeCube : MonoBehaviour {
     }
     void ShowPreviewCube()
     {
-        Vector3 difference = cameraRigTransform.position - headTransform.position;
-        difference.y = 10;
         GameObject g = previewCube;
-        Vector3 tmpScale = g.transform.localScale;
         g.transform.parent = hitObjParent.transform;
-        g.transform.localScale = tmpScale;
-        g.transform.localRotation = Quaternion.Euler(0, 0, 0);
         previewCube.SetActive(true);
         Vector3 test = hitObjParent.transform.InverseTransformPoint(hitPoint);
 
@@ -172,5 +175,11 @@ public class LaserPointerWithMakeCube : MonoBehaviour {
 
         else
             g.transform.localPosition = hitObj.localPosition + (tmp.z / Mathf.Abs(tmp.z)) * new Vector3(0, 0, .15f);
+
+        g.transform.SetParent(null, true);
+        g.transform.localScale = hitObj.transform.lossyScale;
+        g.transform.rotation = hitObj.transform.rotation;
+        previewCube.SetActive(true);
+        
     }
 }
