@@ -13,12 +13,14 @@ public class ControllerScalingObject : MonoBehaviour {
     private static float distance;
     private static Vector3 originalScale;
     private static Transform collidingObject;
+    private float tmp_dis = 0f;
 
     public Hand controlHand;
     [Range(1f,10f)]
     public float maxScale;
     [Range(0.02f,0.2f)]
     public float minScale;
+
 
     private SteamVR_Controller.Device Controller
     {
@@ -60,6 +62,7 @@ public class ControllerScalingObject : MonoBehaviour {
         {
             shouldScale = false;
             collidingObject = null;
+            tmp_dis = 0f;
         }
     }
 
@@ -68,17 +71,22 @@ public class ControllerScalingObject : MonoBehaviour {
         if(controlHand == Hand.Right)
         {
             float rate = Vector3.Distance(handTransform[0].position, handTransform[1].position) / distance;
-            if(originalScale.x * rate > maxScale)
-            {
-                collidingObject.localScale = Vector3.one * maxScale;
-            }
-            else if (originalScale.x * rate < minScale)
-            {
-                collidingObject.localScale = Vector3.one * minScale;
-            }
-            else
-                collidingObject.localScale = originalScale * rate;
+            rate = Mathf.Round(rate * 100 + (rate * 100) % 2) * 0.01f;
             
+            if (Mathf.Abs(tmp_dis - rate) > 0.02 )
+            {
+                if (originalScale.x * rate > maxScale)
+                {
+                    collidingObject.localScale = Vector3.one * maxScale;
+                }
+                else if (originalScale.x * rate < minScale)
+                {
+                    collidingObject.localScale = Vector3.one * minScale;
+                }
+                else
+                    collidingObject.localScale = originalScale * rate;
+                tmp_dis = rate;
+            }
         }
     }
 
@@ -111,6 +119,7 @@ public class ControllerScalingObject : MonoBehaviour {
 
         if (shouldScale)
         {
+
             Scaling();
         }
     }
