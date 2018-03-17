@@ -137,13 +137,13 @@ public class LaserPointerWithMakeCube : MonoBehaviour {
         Vector3 tmp = test - hitObj.localPosition;
 
         if (Mathf.Abs(tmp.x) > Mathf.Abs(tmp.y) && Mathf.Abs(tmp.x) > Mathf.Abs(tmp.z))
-            g.transform.localPosition = hitObj.localPosition + (tmp.x / Mathf.Abs(tmp.x)) * new Vector3(.15f, 0, 0);
+            g.transform.localPosition = hitObj.localPosition + (tmp.x / Mathf.Abs(tmp.x)) * new Vector3(1f, 0, 0);
 
         else if (Mathf.Abs(tmp.y) > Mathf.Abs(tmp.z))
-            g.transform.localPosition = hitObj.localPosition + (tmp.y / Mathf.Abs(tmp.y)) * new Vector3(0, .15f, 0);
+            g.transform.localPosition = hitObj.localPosition + (tmp.y / Mathf.Abs(tmp.y)) * new Vector3(0, 1f, 0);
 
         else
-            g.transform.localPosition = hitObj.localPosition + (tmp.z / Mathf.Abs(tmp.z)) * new Vector3(0, 0, .15f);
+            g.transform.localPosition = hitObj.localPosition + (tmp.z / Mathf.Abs(tmp.z)) * new Vector3(0, 0, 1f);
 
 
         g.transform.parent = hitObjParent.transform;
@@ -168,13 +168,13 @@ public class LaserPointerWithMakeCube : MonoBehaviour {
         Vector3 tmp = test - hitObj.localPosition;
 
         if (Mathf.Abs(tmp.x) > Mathf.Abs(tmp.y) && Mathf.Abs(tmp.x) > Mathf.Abs(tmp.z))
-            g.transform.localPosition = hitObj.localPosition + (tmp.x / Mathf.Abs(tmp.x)) * new Vector3(.15f, 0, 0);
+            g.transform.localPosition = hitObj.localPosition + (tmp.x / Mathf.Abs(tmp.x)) * new Vector3(1f, 0, 0);
 
         else if (Mathf.Abs(tmp.y) > Mathf.Abs(tmp.z))
-            g.transform.localPosition = hitObj.localPosition + (tmp.y / Mathf.Abs(tmp.y)) * new Vector3(0, .15f, 0);
+            g.transform.localPosition = hitObj.localPosition + (tmp.y / Mathf.Abs(tmp.y)) * new Vector3(0, 1f, 0);
 
         else
-            g.transform.localPosition = hitObj.localPosition + (tmp.z / Mathf.Abs(tmp.z)) * new Vector3(0, 0, .15f);
+            g.transform.localPosition = hitObj.localPosition + (tmp.z / Mathf.Abs(tmp.z)) * new Vector3(0, 0, 1f);
 
         g.transform.SetParent(null, true);
         g.transform.localScale = hitObj.transform.lossyScale;
