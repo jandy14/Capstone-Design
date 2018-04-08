@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class ControllerMoveAnotherZone : MonoBehaviour
 { 
     public enum Hand { Left, Right };
+	[SerializeField] private Hand hand;
     static private Transform[] handTransform = new Transform[2];
     static private bool[] isTrigged = new bool[2];
     private static bool shouldMovable;
@@ -22,13 +23,13 @@ public class ControllerMoveAnotherZone : MonoBehaviour
     void Start ()
     {
         //right
-        if ((int)trackedObj.index == 2)
+        if (hand == Hand.Right)
         {
             handTransform[0] = transform;
             isTrigged[0] = false;
         }
         //left
-        else if ((int)trackedObj.index == 3)
+        else if (hand == Hand.Left)
         {
             handTransform[1] = transform;
             isTrigged[1] = false;
@@ -56,11 +57,11 @@ public class ControllerMoveAnotherZone : MonoBehaviour
     {
         if (Controller.GetPressDown(SteamVR_Controller.ButtonMask.Grip))
         {
-            if ((int)trackedObj.index == 2)
+            if (hand == Hand.Right)
             {
                 isTrigged[0] = true;
             }
-            else if ((int)trackedObj.index == 3)
+            else if (hand == Hand.Left)
             {
                 isTrigged[1] = true;
             }
@@ -68,11 +69,11 @@ public class ControllerMoveAnotherZone : MonoBehaviour
         }
         if (Controller.GetPressUp(SteamVR_Controller.ButtonMask.Grip))
         {
-            if ((int)trackedObj.index == 2)
+            if (hand == Hand.Right)
             {
                 isTrigged[0] = false;
             }
-            else if ((int)trackedObj.index == 3)
+            else if (hand == Hand.Left)
             {
                 isTrigged[1] = false;
             }
