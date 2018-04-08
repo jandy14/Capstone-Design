@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class CreativeZoneReadAndWrite : MonoBehaviour {
 
+	public GameObject target;
+	public GameObject madeOf;
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -14,7 +17,14 @@ public class CreativeZoneReadAndWrite : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
 	{
-
+		if (Input.GetKeyDown(KeyCode.Q))
+		{
+			WriteCZ(target, "./data.cz");
+		}
+		if (Input.GetKeyDown(KeyCode.E))
+		{
+			ReadCZ("./data.cz", madeOf);
+		}
 	}
 
 	public static void WriteCZ (GameObject target, string path)
@@ -22,14 +32,17 @@ public class CreativeZoneReadAndWrite : MonoBehaviour {
 		FileStream fs = new FileStream(path, FileMode.CreateNew, FileAccess.Write);
 		BinaryWriter bw = new BinaryWriter(fs);
 
-		string header = "This is CZFILE made by meeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
-		bw.Write(header.ToCharArray());
+		string header = "This is CZFILE made by meeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
+		
+		
+		bw.Write(header.Substring(0, 80).ToCharArray());
 
 		//Count
 		uint childCount = (uint)target.transform.childCount;
 		bw.Write(childCount);
-		
-		for(uint i = 0; i < childCount; ++i)
+		Debug.Log(childCount);
+
+		for (uint i = 0; i < childCount; ++i)
 		{
 			bw.Write(target.transform.GetChild((int)i).localPosition.x);
 			bw.Write(target.transform.GetChild((int)i).localPosition.y);
