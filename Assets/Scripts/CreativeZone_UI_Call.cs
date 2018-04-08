@@ -32,6 +32,7 @@ public class CreativeZone_UI_Call : MonoBehaviour {
             else
             {
                 UI.transform.rotation = v.rotation;
+				UI.transform.eulerAngles = new Vector3(UI.transform.eulerAngles.x, UI.transform.eulerAngles.y,0f);
                 UI.transform.position = v.position + (v.rotation * Vector3.forward * 2.0f);
                 UI_ON = true;
                 laser.gameObject.SetActive(UI_ON);
