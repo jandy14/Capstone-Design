@@ -13,12 +13,14 @@ public class ControllerScalingObject : MonoBehaviour {
     private static float distance;
     private static Vector3 originalScale;
     private static Transform collidingObject;
+    private static Transform collidingChildObject;
+    private static FixedJoint fx;
     private float tmp_dis = 0f;
 
     public Hand controlHand;
     [Range(1f,10f)]
     public float maxScale;
-    [Range(0.02f,0.2f)]
+    [Range(0.005f,0.1f)]
     public float minScale;
 
 
@@ -62,7 +64,8 @@ public class ControllerScalingObject : MonoBehaviour {
         {
             shouldScale = false;
             collidingObject = null;
-            tmp_dis = 0f;
+            //tmp_dis = 0f;
+            tmp_dis = 1f;
         }
     }
 
@@ -73,20 +76,30 @@ public class ControllerScalingObject : MonoBehaviour {
             float rate = Vector3.Distance(handTransform[0].position, handTransform[1].position) / distance;
             rate = Mathf.Round(rate * 100 + (rate * 100) % 2) * 0.01f;
             
-            if (Mathf.Abs(tmp_dis - rate) > 0.02 )
+            if (Mathf.Abs(tmp_dis - rate) > 0.2 )
             {
                 if (originalScale.x * rate > maxScale)
                 {
                     collidingObject.localScale = Vector3.one * maxScale;
+                    rate = maxScale / originalScale.x;
                 }
                 else if (originalScale.x * rate < minScale)
                 {
                     collidingObject.localScale = Vector3.one * minScale;
+                    rate = minScale / originalScale.x;
                 }
                 else
                     collidingObject.localScale = originalScale * rate;
+
+                //GetComponent<FixedJoint>().connectedBody = null;
+                //Debug.DrawLine(collidingObject.position, collidingChildObject.position, Color.blue, 5f);
+                collidingObject.position = collidingChildObject.position + (collidingObject.position - collidingChildObject.position) * (rate/tmp_dis);
+                //Debug.DrawLine(collidingObject.position, collidingChildObject.position, Color.red,5f);
+                //GetComponent<FixedJoint>().connectedBody = collidingObject.GetComponent<Rigidbody>();
+                
                 tmp_dis = rate;
             }
+            
         }
     }
 
@@ -131,6 +144,7 @@ public class ControllerScalingObject : MonoBehaviour {
             if (collidingObject) return;
 
             collidingObject = other.transform.parent;
+            collidingChildObject = other.transform;
         }
     }
 
@@ -141,6 +155,7 @@ public class ControllerScalingObject : MonoBehaviour {
             if (collidingObject) return;
 
             collidingObject = other.transform.parent;
+            collidingChildObject = other.transform;
         }
     }
 

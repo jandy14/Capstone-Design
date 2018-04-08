@@ -1,11 +1,19 @@
 fileFormatVersion: 2
 guid: b76e8020937166d4ba2405b3ed2ac057
-timeCreated: 1517380446
+timeCreated: 1523081140
 licenseType: Free
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - laserPrefab: {fileID: 1396734321618840, guid: aec7b0e52915d3248babd27270269749,
+      type: 2}
+  - Cube: {fileID: 1695195722927072, guid: c005269b56b6cbf48b9d9920ec74bbc4, type: 2}
+  - cameraRigTransform: {instanceID: 0}
+  - teleortReticlePrefab: {fileID: 1639319533735882, guid: cfb27f702a3af894b918c1816366ee19,
+      type: 2}
+  - headTransform: {instanceID: 0}
+  - whoisyourmother: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
