@@ -19,14 +19,53 @@ public class CreativeZoneReadAndWrite : MonoBehaviour {
 	{
 		if (Input.GetKeyDown(KeyCode.Q))
 		{
-			WriteCZ(target, "./data.cz");
+			WriteCZ(target, "./data/data.cz");
 		}
 		if (Input.GetKeyDown(KeyCode.E))
 		{
-			ReadCZ("./data.cz", madeOf);
+			ReadCZ("./data/data.cz", madeOf);
+		}
+		if (Input.GetKeyDown(KeyCode.T))
+		{
+			CZtoSTL("./data/data.cz", "./data/cz2stl.stl", madeOf);
 		}
 	}
 
+	public void SaveToCZ()
+	{
+		WriteCZ(target, "./data/data.cz");
+
+		//int childs = target.transform.childCount;
+		//for (int i = childs - 1; i > 1; --i)
+		//{
+		//	Destroy(transform.GetChild(i).gameObject);
+		//}
+	}
+	public void SaveToSTL()
+	{
+		CZtoSTL(target, "./data/cz2stl.stl");
+
+		//int childs = target.transform.childCount;
+		//for (int i = childs - 1; i > 1; --i)
+		//{
+		//	Destroy(transform.GetChild(i).gameObject);
+		//}
+	}
+	public void LoadCZ(bool isFreeze)
+	{
+		GameObject g = ReadCZ("./data/data.cz", madeOf);
+
+		g.transform.position = target.transform.position;
+		g.transform.rotation = target.transform.rotation;
+		g.transform.localScale = target.transform.localScale;
+		Destroy(target);
+		target = g;
+
+		if(!isFreeze)
+		{
+			target.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+		}
+	}
 	public static void WriteCZ (GameObject target, string path)
 	{
 		FileStream fs = new FileStream(path, FileMode.CreateNew, FileAccess.Write);
@@ -56,7 +95,7 @@ public class CreativeZoneReadAndWrite : MonoBehaviour {
 	{
 		GameObject result = new GameObject();
 		result.AddComponent<Rigidbody>();
-
+		result.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
 		FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read);
 		BinaryReader br = new BinaryReader(fs);
 
@@ -76,5 +115,31 @@ public class CreativeZoneReadAndWrite : MonoBehaviour {
 		}
 
 		return result;
+	}
+
+	public static void CZtoSTL(string czPath, string stlPath, GameObject madeOf)
+	{
+		GameObject target = ReadCZ(czPath, madeOf);
+		CZtoSTL(target, stlPath);
+		Destroy(target);
+	}
+	public static void CZtoSTL(GameObject target, string stlPath)
+	{
+		MeshFilter[] meshFilters = target.GetComponentsInChildren<MeshFilter>();
+		CombineInstance[] combine = new CombineInstance[meshFilters.Length];
+
+		for (int i = 0; i <meshFilters.Length; ++i)
+		{
+			combine[i].mesh = meshFilters[i].sharedMesh;
+			combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
+		}
+
+		GameObject tmp = new GameObject();
+		tmp.AddComponent<MeshFilter>();
+		tmp.GetComponent<MeshFilter>().mesh = new Mesh();
+		tmp.GetComponent<MeshFilter>().mesh.CombineMeshes(combine);
+
+		STLReadAndWrite.WriteSTL(tmp, stlPath);
+		Destroy(tmp);
 	}
 }
