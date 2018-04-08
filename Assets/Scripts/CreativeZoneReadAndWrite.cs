@@ -5,13 +5,14 @@ using UnityEngine;
 
 public class CreativeZoneReadAndWrite : MonoBehaviour {
 
+	[SerializeField]private Transform v;
 	public GameObject target;
 	public GameObject madeOf;
 
 	// Use this for initialization
 	void Start ()
 	{
-		
+		v = transform.Find("[CameraRig]/Camera(head)");
 	}
 	
 	// Update is called once per frame
@@ -55,15 +56,22 @@ public class CreativeZoneReadAndWrite : MonoBehaviour {
 	{
 		GameObject g = ReadCZ("./data/data.cz", madeOf);
 
-		g.transform.position = target.transform.position;
-		g.transform.rotation = target.transform.rotation;
-		g.transform.localScale = target.transform.localScale;
-		Destroy(target);
-		target = g;
-
+		if (target)
+		{
+			g.transform.position = target.transform.position;
+			g.transform.rotation = target.transform.rotation;
+			g.transform.localScale = target.transform.localScale;
+			Destroy(target);
+			target = g;
+		}
+		else
+		{
+			g.transform.position = v.position + (v.rotation * Vector3.forward * 0.5f);
+			g.transform.localScale = Vector3.one * 0.2f;
+		}
 		if(!isFreeze)
 		{
-			target.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+			g.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
 		}
 	}
 	public static void WriteCZ (GameObject target, string path)
