@@ -7,9 +7,11 @@ public class ControllerMoveAnotherZone : MonoBehaviour
 { 
     public enum Hand { Left, Right };
 	[SerializeField] private Hand hand;
+	[SerializeField] private GameObject portal;
     static private Transform[] handTransform = new Transform[2];
     static private bool[] isTrigged = new bool[2];
     private static bool shouldMovable;
+	private GameObject gamePortal;
     private SteamVR_TrackedObject trackedObj;
 
     private SteamVR_Controller.Device Controller
@@ -43,6 +45,10 @@ public class ControllerMoveAnotherZone : MonoBehaviour
             //Debug.Log(Vector3.Distance(handTransform[0].position, handTransform[1].position));
             if(Vector3.Distance(handTransform[0].position, handTransform[1].position) < 0.15)
                 shouldMovable = true;
+			if(hand == Hand.Right)
+			{
+				gamePortal = Instantiate(portal);
+			}
         }
     }
     void CheckDisableMoveZone()
@@ -50,6 +56,9 @@ public class ControllerMoveAnotherZone : MonoBehaviour
         if (!(isTrigged[0] == true && isTrigged[1] == true))
         {
             shouldMovable = false;
+
+			if (gamePortal)
+				Destroy(gamePortal);
         }
     }
 
@@ -82,7 +91,13 @@ public class ControllerMoveAnotherZone : MonoBehaviour
 
         if (shouldMovable)
         {
-            if(Vector3.Distance(handTransform[0].position, handTransform[1].position) > 1.2)
+			if(gamePortal)
+			{
+				gamePortal.transform.position = (handTransform[0].position + handTransform[1].position) / 2;
+				gamePortal.transform.localScale = Vector3.one * 0.2f * Vector3.Distance(handTransform[0].position, handTransform[1].position);
+				gamePortal.transform.eulerAngles = (handTransform[0].eulerAngles + handTransform[1].eulerAngles) / 2;
+			}
+			if (Vector3.Distance(handTransform[0].position, handTransform[1].position) > 1.2)
             {
                 //Debug.Log(Vector3.Distance(handTransform[0].position, handTransform[1].position));
                 //Debug.Log("MoveZone");

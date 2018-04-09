@@ -15,7 +15,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &130266
 GameObject:
@@ -27,6 +27,7 @@ GameObject:
   - component: {fileID: 430266}
   - component: {fileID: 3330266}
   - component: {fileID: 2330266}
+  - component: {fileID: 65716404123899278}
   m_Layer: 0
   m_Name: Wood
   m_TagString: Untagged
@@ -44,12 +45,13 @@ GameObject:
   - component: {fileID: 430268}
   - component: {fileID: 3330268}
   - component: {fileID: 2330268}
+  - component: {fileID: 136431627449457822}
   m_Layer: 0
   m_Name: Glass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!1 &130270
 GameObject:
@@ -142,9 +144,9 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 130272}
-  m_LocalRotation: {x: 0, y: -0.21388297, z: 0, w: 0.97685933}
-  m_LocalPosition: {x: -3.52, y: 3.41, z: -8.02}
-  m_LocalScale: {x: 1.4671637, y: 1.4671639, z: 1.4671639}
+  m_LocalRotation: {x: 0, y: 0.79732066, z: 0, w: 0.6035559}
+  m_LocalPosition: {x: -0.8873677, y: -1.2142576, z: -4.4207783}
+  m_LocalScale: {x: 1.4671636, y: 1.4671639, z: 1.4671639}
   m_Children:
   - {fileID: 430270}
   m_Father: {fileID: 0}
@@ -159,6 +161,7 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 1
@@ -174,6 +177,7 @@ MeshRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -191,6 +195,7 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 1
@@ -206,6 +211,7 @@ MeshRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -223,6 +229,7 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 1
@@ -238,6 +245,7 @@ MeshRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -278,3 +286,28 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 130272}
   m_IsPrefabParent: 1
+--- !u!65 &65716404123899278
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 130266}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.40000004, y: 0.20000008, z: 0.20000006}
+  m_Center: {x: 0.00000023841858, y: 0.00000023841858, z: 0.10000006}
+--- !u!136 &136431627449457822
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 130268}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.05
+  m_Height: 0.3
+  m_Direction: 0
+  m_Center: {x: 0.000000059604645, y: 0.00000023841858, z: 0.07423077}

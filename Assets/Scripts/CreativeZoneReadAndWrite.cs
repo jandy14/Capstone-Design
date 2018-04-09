@@ -5,14 +5,16 @@ using UnityEngine;
 
 public class CreativeZoneReadAndWrite : MonoBehaviour {
 
-	[SerializeField]private Transform v;
+	[SerializeField] private Transform v;
+	[SerializeField] private Material m;
 	public GameObject target;
 	public GameObject madeOf;
 
 	// Use this for initialization
 	void Start ()
 	{
-		v = transform.Find("[CameraRig]/Camera(head)");
+		Debug.Log(GameObject.FindWithTag("MainCamera"));
+		v = GameObject.FindWithTag("MainCamera").transform;
 	}
 	
 	// Update is called once per frame
@@ -67,12 +69,33 @@ public class CreativeZoneReadAndWrite : MonoBehaviour {
 		else
 		{
 			g.transform.position = v.position + (v.rotation * Vector3.forward * 0.5f);
-			g.transform.localScale = Vector3.one * 0.2f;
+			MeshRenderer[] render = g.GetComponentsInChildren<MeshRenderer>();
+			Bounds combine = new Bounds();
+			foreach (MeshRenderer r in render)
+			{
+				combine.Encapsulate(r.bounds);
+			}
+			Vector3 size = combine.size;
+			float max = size.x > size.y ? (size.x > size.z ? size.x : size.z) : (size.y > size.z ? size.y : size.z);
+			g.transform.localScale = Vector3.one / (max * 2);
+			g.transform.position = v.position + (v.rotation * Vector3.forward * 0.5f);
 		}
 		if(!isFreeze)
 		{
 			g.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
 		}
+	}
+	public void LoadSTL()
+	{
+		GameObject g = STLReadAndWrite.ReadSTL("./data/data.stl");
+
+		g.AddComponent<Rigidbody>();
+		g.AddComponent<MeshCollider>().convex = true;
+		g.GetComponent<MeshRenderer>().material = m;
+		Vector3 size = g.GetComponent<MeshRenderer>().bounds.size;
+		float max = size.x > size.y ? (size.x > size.z ? size.x : size.z) : (size.y > size.z ? size.y : size.z);
+		g.transform.localScale = Vector3.one / (max * 2);
+		g.transform.position = v.position + (v.rotation * Vector3.forward * 0.5f);
 	}
 	public static void WriteCZ (GameObject target, string path)
 	{
