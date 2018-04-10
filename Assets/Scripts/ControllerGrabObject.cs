@@ -89,8 +89,8 @@ public class ControllerGrabObject : MonoBehaviour {
             if(collidingObject)
             {
                 GrabObject();
-				objectInHand.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-
+				if(objectInHand)
+					objectInHand.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
 			}
         }
 
