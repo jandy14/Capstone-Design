@@ -68,6 +68,7 @@ public class CreativeZoneReadAndWrite : MonoBehaviour {
 		}
 		else
 		{
+			g.AddComponent<HoldObject>();
 			g.transform.position = v.position + (v.rotation * Vector3.forward * 0.5f);
 			MeshRenderer[] render = g.GetComponentsInChildren<MeshRenderer>();
 			Bounds combine = new Bounds();
@@ -79,6 +80,7 @@ public class CreativeZoneReadAndWrite : MonoBehaviour {
 			float max = size.x > size.y ? (size.x > size.z ? size.x : size.z) : (size.y > size.z ? size.y : size.z);
 			g.transform.localScale = Vector3.one / (max * 2);
 			g.transform.position = v.position + (v.rotation * Vector3.forward * 0.5f);
+			
 		}
 		if(!isFreeze)
 		{
@@ -89,6 +91,7 @@ public class CreativeZoneReadAndWrite : MonoBehaviour {
 	{
 		GameObject g = STLReadAndWrite.ReadSTL("./data/data.stl");
 
+		g.AddComponent<HoldObject>();
 		g.AddComponent<Rigidbody>();
 		g.AddComponent<MeshCollider>().convex = true;
 		g.GetComponent<MeshRenderer>().material = m;

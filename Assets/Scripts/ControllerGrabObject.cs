@@ -7,7 +7,6 @@ public class ControllerGrabObject : MonoBehaviour {
     private GameObject collidingObject;
     private GameObject objectInHand;
     private Grid grid;
-
     
     private SteamVR_Controller.Device Controller
     {
@@ -90,14 +89,19 @@ public class ControllerGrabObject : MonoBehaviour {
             if(collidingObject)
             {
                 GrabObject();
-            }
+				objectInHand.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+
+			}
         }
 
         if(Controller.GetHairTriggerUp())
         {
             if (objectInHand)
             {
-                ReleaseObject();
+				if (objectInHand.GetComponent<HoldObject>().isHolding)
+					objectInHand.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+				ReleaseObject();
+
             }
         }
 	}
