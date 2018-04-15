@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
+//string[] file = Directory.GetFiles("./data/", "*.stl");
+//foreach(string item in file)
+//{
+//	Debug.Log(item);
+//}
+
 public class CreativeZoneReadAndWrite : MonoBehaviour {
 
 	[SerializeField] private Transform v;
