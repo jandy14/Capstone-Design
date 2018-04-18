@@ -11,11 +11,17 @@ using UnityEngine;
 
 public class CreativeZoneReadAndWrite : MonoBehaviour {
 
+	static public CreativeZoneReadAndWrite instance;
 	[SerializeField] private Transform v;
 	[SerializeField] private Material m;
 	public GameObject target;
 	public GameObject madeOf;
 
+	private void Awake()
+	{
+		if (instance == null)
+			instance = this;
+	}
 	// Use this for initialization
 	void Start ()
 	{
@@ -95,7 +101,22 @@ public class CreativeZoneReadAndWrite : MonoBehaviour {
 	}
 	public void LoadSTL()
 	{
-		GameObject g = STLReadAndWrite.ReadSTL("./data/data.stl");
+		string[] file = Directory.GetFiles("./data/", "*.stl");
+		GameObject[] result = new GameObject[file.Length];
+
+		int index = 0;
+		foreach (string item in file)
+		{
+			result[index] = STLReadAndWrite.ReadSTL(item);
+			result[index].GetComponent<MeshRenderer>().material = m;
+			++index;
+		}
+
+		LocalLoadListScript.instance.SetSTLList(result, file);
+	}
+	public void LoadSTLToPath(string path)
+	{
+		GameObject g = STLReadAndWrite.ReadSTL(path);
 
 		g.AddComponent<HoldObject>();
 		g.AddComponent<Rigidbody>();
