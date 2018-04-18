@@ -132,6 +132,7 @@ public class LaserPointerWithMakeCube : MonoBehaviour {
         Vector3 difference = cameraRigTransform.position - headTransform.position;
         difference.y = 10;
         GameObject g = Instantiate(Cube, hitObjParent.transform);
+		g.transform.localEulerAngles = Vector3.zero;
         Vector3 test = hitObjParent.transform.InverseTransformPoint(hitPoint);
 
         Vector3 tmp = test - hitObj.localPosition;

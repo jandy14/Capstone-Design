@@ -28,7 +28,22 @@ public class STLReadAndWrite : MonoBehaviour {
 
 	public static void WriteSTL(GameObject pTarget, string pPath)
 	{
-		FileStream _fs = new FileStream(pPath, FileMode.CreateNew, FileAccess.Write);
+		FileStream _fs;
+		int index = 1;
+		if (File.Exists(pPath))
+		{
+			string name = pPath.Substring(0, pPath.Length - 4);
+			while (File.Exists(name + "(" + index + ")" + ".stl"))
+			{
+				++index;
+			}
+			_fs = new FileStream(name + "(" + index + ")" + ".stl", FileMode.CreateNew, FileAccess.Write);
+		}
+		else
+		{
+			_fs = new FileStream(pPath, FileMode.CreateNew, FileAccess.Write);
+		}
+
 		BinaryWriter _bw = new BinaryWriter(_fs);
 		string _header = "This is mySTLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL";
 		_bw.Write(_header.ToCharArray());
