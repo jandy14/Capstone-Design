@@ -100,4 +100,9 @@ public class ControllerGrabObjectInCreateZone : MonoBehaviour
             }
         }
     }
+
+	private void OnJointBreak(float breakForce)
+	{
+		objectInHand.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+	}
 }

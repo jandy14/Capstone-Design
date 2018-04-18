@@ -32,18 +32,18 @@ public class CreativeZoneReadAndWrite : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
 	{
-		if (Input.GetKeyDown(KeyCode.Q))
-		{
-			WriteCZ(target, "./data/data.cz");
-		}
-		if (Input.GetKeyDown(KeyCode.E))
-		{
-			ReadCZ("./data/data.cz", madeOf);
-		}
-		if (Input.GetKeyDown(KeyCode.T))
-		{
-			CZtoSTL("./data/data.cz", "./data/cz2stl.stl", madeOf);
-		}
+		//if (Input.GetKeyDown(KeyCode.Q))
+		//{
+		//	WriteCZ(target, "./data/data.cz");
+		//}
+		//if (Input.GetKeyDown(KeyCode.E))
+		//{
+		//	ReadCZ("./data/data.cz", madeOf);
+		//}
+		//if (Input.GetKeyDown(KeyCode.T))
+		//{
+		//	CZtoSTL("./data/data.cz", "./data/cz2stl.stl", madeOf);
+		//}
 	}
 
 	public void SaveToCZ()
@@ -66,9 +66,44 @@ public class CreativeZoneReadAndWrite : MonoBehaviour {
 		//	Destroy(transform.GetChild(i).gameObject);
 		//}
 	}
-	public void LoadCZ(bool isFreeze)
+
+	public void LoadCZInGame()
 	{
-		GameObject g = ReadCZ("./data/data.cz", madeOf);
+		string[] file = Directory.GetFiles("./data/", "*.cz");
+		GameObject[] result = new GameObject[file.Length];
+
+		int index = 0;
+		foreach (string item in file)
+		{
+			result[index] = ReadCZ(item, madeOf);
+			Destroy(result[index].GetComponent<Rigidbody>());
+			//result[index].GetComponent<MeshRenderer>().material = m;
+			++index;
+		}
+
+		LocalLoadListScript.instance.SetCZList(result, file);
+	}
+
+	public void LoadCZInCreative()
+	{
+		string[] file = Directory.GetFiles("./data/", "*.cz");
+		GameObject[] result = new GameObject[file.Length];
+
+		int index = 0;
+		foreach (string item in file)
+		{
+			result[index] = ReadCZ(item, madeOf);
+			//Destroy(result[index].GetComponent<Rigidbody>());
+			//result[index].GetComponent<MeshRenderer>().material = m;
+			++index;
+		}
+
+		LocalLoadListScript.instance.SetCZListInCreative(result, file);
+	}
+
+	public void LoadCZToPath(bool isFreeze, string path)
+	{
+		GameObject g = ReadCZ(path, madeOf);
 
 		if (target)
 		{
@@ -112,7 +147,7 @@ public class CreativeZoneReadAndWrite : MonoBehaviour {
 			++index;
 		}
 
-		LocalLoadListScript.instance.SetSTLList(result, file);
+		LocalLoadListScript.instance.SetitemList(result, file);
 	}
 	public void LoadSTLToPath(string path)
 	{
@@ -125,11 +160,28 @@ public class CreativeZoneReadAndWrite : MonoBehaviour {
 		Vector3 size = g.GetComponent<MeshRenderer>().bounds.size;
 		float max = size.x > size.y ? (size.x > size.z ? size.x : size.z) : (size.y > size.z ? size.y : size.z);
 		g.transform.localScale = Vector3.one / (max * 2);
-		g.transform.position = v.position + (v.rotation * Vector3.forward * 0.5f);
+		//위치 조정
+		g.transform.position = v.position;// + (v.rotation * Vector3.forward * 0.5f);
+		g.transform.position += (v.position - g.GetComponent<MeshRenderer>().bounds.center);
+		g.transform.position += (v.rotation * Vector3.forward * 0.5f);
 	}
 	public static void WriteCZ (GameObject target, string path)
 	{
-		FileStream fs = new FileStream(path, FileMode.CreateNew, FileAccess.Write);
+		FileStream fs;
+		int index = 1;
+		if (File.Exists(path))
+		{
+			string name = path.Substring(0, path.Length - 3);
+			while (File.Exists(name + "(" + index + ")" + ".cz"))
+			{
+				++index;
+			}
+			fs = new FileStream(name + "(" + index + ")" + ".cz", FileMode.CreateNew, FileAccess.Write);
+		}
+		else
+		{
+			fs = new FileStream(path, FileMode.CreateNew, FileAccess.Write);
+		}
 		BinaryWriter bw = new BinaryWriter(fs);
 
 		string header = "This is CZFILE made by meeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
