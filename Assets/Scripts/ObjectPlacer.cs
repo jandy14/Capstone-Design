@@ -58,6 +58,11 @@ public class ObjectPlacer : MonoBehaviour {
 			myCamera.transform.position = targetPos + (Vector3.back * 10);
 		}
 		myCamera.transform.eulerAngles = Vector3.zero;
-		target.transform.Rotate(Vector3.up);
+		//target.transform.Rotate(Vector3.up);
+		//target.transform.Rotate(Vector3.back * 0.7f);
+		//target.transform.Rotate(Vector3.right * 1.2f);
+		target.transform.Rotate(Vector3.up * Mathf.Sin(Time.time));
+		target.transform.Rotate(Vector3.forward * Mathf.Sin(Time.time + 2));
+		target.transform.Rotate(Vector3.right * Mathf.Sin(Time.time + 4));
 	}
 }
