@@ -75,15 +75,19 @@ public class CreativeZoneReadAndWrite : MonoBehaviour {
 		int index = 0;
 		foreach (string item in file)
 		{
-			result[index] = ReadCZ(item, madeOf);
-			Destroy(result[index].GetComponent<Rigidbody>());
+			//result[index] = ReadCZ(item, madeOf);
+			//Destroy(result[index].GetComponent<Rigidbody>());
 			//result[index].GetComponent<MeshRenderer>().material = m;
+			GameObject tmp = ReadCZ(item, madeOf);
+			result[index] = CZtoSTLObject(tmp);
+			result[index].AddComponent<MeshRenderer>();
+			result[index].GetComponent<MeshRenderer>().material = m;
+			Destroy(tmp);
 			++index;
 		}
 
 		LocalLoadListScript.instance.SetCZList(result, file);
 	}
-
 	public void LoadCZInCreative()
 	{
 		string[] file = Directory.GetFiles("./data/", "*.cz");
@@ -92,7 +96,11 @@ public class CreativeZoneReadAndWrite : MonoBehaviour {
 		int index = 0;
 		foreach (string item in file)
 		{
-			result[index] = ReadCZ(item, madeOf);
+			GameObject tmp = ReadCZ(item, madeOf);
+			result[index] = CZtoSTLObject(tmp);
+			result[index].AddComponent<MeshRenderer>();
+			result[index].GetComponent<MeshRenderer>().material = m;
+			Destroy(tmp);
 			//Destroy(result[index].GetComponent<Rigidbody>());
 			//result[index].GetComponent<MeshRenderer>().material = m;
 			++index;
@@ -254,5 +262,22 @@ public class CreativeZoneReadAndWrite : MonoBehaviour {
 
 		STLReadAndWrite.WriteSTL(tmp, stlPath);
 		Destroy(tmp);
+	}
+	public static GameObject CZtoSTLObject(GameObject target)
+	{
+		MeshFilter[] meshFilters = target.GetComponentsInChildren<MeshFilter>();
+		CombineInstance[] combine = new CombineInstance[meshFilters.Length];
+
+		for (int i = 0; i < meshFilters.Length; ++i)
+		{
+			combine[i].mesh = meshFilters[i].sharedMesh;
+			combine[i].transform = meshFilters[i].transform.localToWorldMatrix;
+		}
+
+		GameObject tmp = new GameObject();
+		tmp.AddComponent<MeshFilter>();
+		tmp.GetComponent<MeshFilter>().mesh = new Mesh();
+		tmp.GetComponent<MeshFilter>().mesh.CombineMeshes(combine);
+		return tmp;
 	}
 }
