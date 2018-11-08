@@ -22,8 +22,8 @@ public class MusicPlayer : MonoBehaviour {
 			foreach (AudioSource a in speaker)
 			{
 				a.clip = playList[index];
-				if (soundSetting.Length > index)
-					a.volume = soundSetting[index];
+				//if (soundSetting.Length > index)
+				//	a.volume = soundSetting[index];
 				a.Play();
 			}
 		}
