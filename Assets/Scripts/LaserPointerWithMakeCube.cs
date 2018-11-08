@@ -3,21 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class LaserPointerWithMakeCube : MonoBehaviour {
-    private SteamVR_TrackedObject trackedObj;
-    public GameObject laserPrefab;
-    private GameObject laser;
-    private Transform laserTransform;
-    private GameObject previewCube;
-    private Vector3 hitPoint;
-    public GameObject Cube;
+	private SteamVR_TrackedObject trackedObj;
+	public GameObject laserPrefab;
+	private GameObject laser;
+	private Transform laserTransform;
+	private GameObject previewCube;
+	private Vector3 hitPoint;
+	public GameObject Cube;
+	public AudioClip makeSound;
+	public AudioClip removeSound;
 
-    public Transform cameraRigTransform;
-    public Transform headTransform;
-    public LayerMask makeCubeMask;
-    private Transform hitObj;
-    private bool shouldMake;
-    private bool shouldDelete;
-    private GameObject hitObjParent;
+	public Transform cameraRigTransform;
+	public Transform headTransform;
+	public LayerMask makeCubeMask;
+	private Transform hitObj;
+	private bool shouldMake;
+	private bool shouldDelete;
+	private GameObject hitObjParent;
+	[SerializeField] private AudioSource soundPlayer;
 
     private SteamVR_Controller.Device Controller
     {
@@ -151,6 +154,10 @@ public class LaserPointerWithMakeCube : MonoBehaviour {
 
 
         hitObj = null;
+
+		soundPlayer.clip = makeSound;
+		soundPlayer.Play();
+
     }
     void DeleteCube()
     {
@@ -158,7 +165,9 @@ public class LaserPointerWithMakeCube : MonoBehaviour {
         {
             Destroy(hitObj.gameObject);
         }
-    }
+		soundPlayer.clip = removeSound;
+		soundPlayer.Play();
+	}
     void ShowPreviewCube()
     {
         GameObject g = previewCube;

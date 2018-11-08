@@ -5,9 +5,12 @@ using UnityEngine.UI;
 
 public class LocalLoadListScript : MonoBehaviour {
 
+	[SerializeField] private AudioSource soundPlayer;
+
 	static public LocalLoadListScript instance;
 	public GameObject button;
 	public GameObject[] itemList;
+	public AudioClip makeObject;
 
 	private void Awake()
 	{
@@ -68,7 +71,12 @@ public class LocalLoadListScript : MonoBehaviour {
 			itemList[i].transform.localScale = Vector3.one / (max * 0.8f);
 			GameObject g = Instantiate(button, transform.GetChild(0));
 			string tmp = path[i];
-			g.GetComponent<Button>().onClick.AddListener(() => { CreativeZoneReadAndWrite.instance.LoadCZToPath(true, tmp); Debug.Log(tmp); });
+			g.GetComponent<Button>().onClick.AddListener(() => {
+				CreativeZoneReadAndWrite.instance.LoadCZToPath(true, tmp);
+				Debug.Log(tmp);
+				soundPlayer.clip = makeObject;
+				soundPlayer.Play();
+			});
 			g.transform.GetComponentInChildren<ObjectPlacer>().target = itemList[i];
 		}
 	}
@@ -99,7 +107,12 @@ public class LocalLoadListScript : MonoBehaviour {
 			itemList[i].transform.localScale = Vector3.one / (max * 0.8f);
 			GameObject g = Instantiate(button, transform.GetChild(0));
 			string tmp = path[i];
-			g.GetComponent<Button>().onClick.AddListener(() => { CreativeZoneReadAndWrite.instance.LoadSTLToPath(tmp); Debug.Log(tmp); } );
+			g.GetComponent<Button>().onClick.AddListener(() => {
+				CreativeZoneReadAndWrite.instance.LoadSTLToPath(tmp);
+				Debug.Log(tmp);
+				soundPlayer.clip = makeObject;
+				soundPlayer.Play();
+			} );
 			g.transform.GetComponentInChildren<ObjectPlacer>().target = itemList[i];
 		}
 	}

@@ -5,10 +5,12 @@ using UnityEngine;
 public class CreativeZone_UI_Call : MonoBehaviour {
     public Transform v;
     public  GameObject UI;
+	public AudioClip menuCallSound;
     private SteamVR_TrackedObject trackedObj;
     private bool UI_ON = false;
+	[SerializeField] private AudioSource soundPlayer;
 
-    private SteamVR_Controller.Device Controller
+	private SteamVR_Controller.Device Controller
     {
         get { return SteamVR_Controller.Input((int)trackedObj.index); }
     }
@@ -35,8 +37,9 @@ public class CreativeZone_UI_Call : MonoBehaviour {
                 UI_ON = true;
 
             }
-
-        }
+			soundPlayer.clip = menuCallSound;
+			soundPlayer.Play();
+		}
 
 	}
 }
